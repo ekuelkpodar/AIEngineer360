@@ -18,14 +18,15 @@ export function LayoutShell({ children }: { children: React.ReactNode }) {
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="min-h-screen">
-      <header className="sticky top-0 z-30 backdrop-blur border-b border-border bg-[#0b1021cc]">
+    <div className="min-h-screen relative">
+      <div className="grid-overlay" />
+      <header className="sticky top-0 z-30 backdrop-blur border-b border-border bg-[#060a14e6]">
         <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2 font-display text-lg">
             <span className="h-9 w-9 rounded-2xl bg-accent/20 border border-accent/30 flex items-center justify-center text-accent font-bold shadow-glow">
               M
             </span>
-            <span className="font-semibold">ModelPrep Hub</span>
+            <span className="font-semibold tracking-tight">ModelPrep Hub</span>
           </Link>
           <nav className="hidden md:flex items-center gap-6 text-sm text-slate-200">
             {navItems.map((item) => (
@@ -33,7 +34,7 @@ export function LayoutShell({ children }: { children: React.ReactNode }) {
                 key={item.href}
                 href={item.href}
                 className={clsx(
-                  "hover:text-white transition",
+                  "hover:text-white transition font-medium",
                   pathname === item.href && "text-accent"
                 )}
               >
@@ -67,7 +68,7 @@ export function LayoutShell({ children }: { children: React.ReactNode }) {
           </div>
         )}
       </header>
-      <main className="max-w-6xl mx-auto px-4 py-10 md:py-14">{children}</main>
+      <main className="max-w-6xl mx-auto px-4 py-10 md:py-14 relative">{children}</main>
       <footer className="border-t border-border mt-12">
         <div className="max-w-6xl mx-auto px-4 py-8 text-sm text-slate-400 flex flex-col md:flex-row justify-between gap-3">
           <div>
