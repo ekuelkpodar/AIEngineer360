@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { clsx } from "clsx";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
+import { SearchOverlay } from "./search-overlay";
 
 const navItems = [
   { href: "/", label: "Home" },
@@ -42,6 +43,15 @@ export function LayoutShell({ children }: { children: React.ReactNode }) {
               </Link>
             ))}
           </nav>
+          <div className="hidden md:flex items-center gap-3">
+            <SearchOverlay />
+            <Link
+              href="/practice?mode=timed"
+              className="rounded-xl border border-accent/50 bg-accent/10 px-3 py-2 text-sm text-accent hover:bg-accent/20 transition"
+            >
+              Resume / Start
+            </Link>
+          </div>
           <div className="md:hidden">
             <button
               onClick={() => setOpen((v) => !v)}
@@ -64,6 +74,16 @@ export function LayoutShell({ children }: { children: React.ReactNode }) {
                   {item.label}
                 </Link>
               ))}
+              <button
+                className="text-sm text-left text-accent"
+                onClick={() => {
+                  setOpen(false);
+                  const event = new KeyboardEvent("keydown", { key: "k", metaKey: true });
+                  window.dispatchEvent(event);
+                }}
+              >
+                Search (⌘K)
+              </button>
             </div>
           </div>
         )}

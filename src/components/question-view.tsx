@@ -6,6 +6,7 @@ import { Difficulty, QuestionType, Topic } from "@prisma/client";
 import { difficultyMeta, typeLabels } from "@/lib/questions";
 import Link from "next/link";
 import { ArrowRight, Bookmark, CheckCircle, Clock, Shuffle } from "lucide-react";
+import { QuestionModes } from "./question-modes";
 
 export type QuestionViewModel = {
   id: string;
@@ -41,16 +42,7 @@ export function QuestionView({ question, related }: { question: QuestionViewMode
         <h1 className="text-2xl font-display font-semibold">{question.title}</h1>
         <p className="text-slate-300 whitespace-pre-wrap leading-relaxed">{question.prompt}</p>
 
-        <div className="space-y-2">
-          <Button variant="primary" onClick={() => setShowAnswer((v) => !v)}>
-            {showAnswer ? "Hide answer" : "Reveal answer"}
-          </Button>
-          {showAnswer && (
-            <div className="prose prose-invert prose-sm">
-              <p className="text-slate-200 whitespace-pre-wrap">{question.answer}</p>
-            </div>
-          )}
-        </div>
+        <QuestionModes answer={question.answer} />
 
         <div className="space-y-3">
           <div className="font-semibold">Personal notes</div>

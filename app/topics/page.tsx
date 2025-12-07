@@ -1,7 +1,8 @@
 import Link from "next/link";
-import { Input, Card, Badge } from "@/components/ui";
+import { Input, Card, Badge, Button } from "@/components/ui";
 import { getTopics } from "@/lib/questions";
 import { Filter, FolderTree } from "lucide-react";
+import { TopicCard } from "@/components/cards";
 
 export const dynamic = "force-dynamic";
 
@@ -38,23 +39,15 @@ export default async function TopicsPage({ searchParams }: { searchParams: { q?:
       </div>
       <div className="grid md:grid-cols-3 gap-4">
         {filtered.map((topic) => (
-          <Card key={topic.id} className="p-5 space-y-3 hover:border-accent/60 hover:shadow-glow transition">
-            <div className="flex items-center justify-between gap-3">
-              <div>
-                <h3 className="font-semibold text-lg leading-tight">{topic.name}</h3>
-                <p className="text-sm text-slate-400 line-clamp-3 mt-1">{topic.description}</p>
-              </div>
-              {topic.isFeatured && <Badge color="green">Featured</Badge>}
-            </div>
-            <div className="flex items-center justify-between text-sm">
-              <Link href={`/topics/${topic.slug}`} className="text-accent inline-flex items-center gap-1">
-                Explore questions →
-              </Link>
-              <span className="text-slate-500 inline-flex items-center gap-1">
-                <Filter size={14} /> {topic.slug}
-              </span>
-            </div>
-          </Card>
+          <TopicCard
+            key={topic.id}
+            name={topic.name}
+            description={topic.description}
+            slug={topic.slug}
+            featured={topic.isFeatured}
+            progress={topic.orderIndex * 3 + 10}
+            why="Practice ready"
+          />
         ))}
       </div>
     </div>

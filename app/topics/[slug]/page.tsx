@@ -4,6 +4,8 @@ import { difficultyMeta, getQuestionsByTopic, getTopicBySlug, typeLabels } from 
 import { Difficulty, QuestionType } from "@prisma/client";
 import { notFound } from "next/navigation";
 import { ArrowRight, Filter } from "lucide-react";
+import { QuestionCard } from "@/components/cards";
+import { FilterBar } from "@/components/filter-bar";
 
 export default async function TopicPage({ params, searchParams }: { params: { slug: string }; searchParams: { difficulty?: Difficulty; type?: QuestionType } }) {
   const topic = await getTopicBySlug(params.slug);
@@ -34,71 +36,76 @@ export default async function TopicPage({ params, searchParams }: { params: { sl
       </div>
 
       <Card className="p-4 md:p-5 border border-border/80 bg-[#0c1224]">
-        <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-slate-400 mb-3">
-          <Filter size={14} className="text-accent" /> Filters
+        <div className="flex items-center justify-between mb-3 gap-3 flex-wrap">
+          <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
+            <Filter size={14} className="text-accent" /> Filters
+          </div>
+          <div className="text-xs text-slate-500">Refine by difficulty, type, and time</div>
         </div>
-        <div className="flex flex-wrap gap-2 text-sm text-slate-300">
-          <FilterChip label="All" href={`/topics/${topic.slug}`} active={!searchParams.difficulty && !searchParams.type} />
-          {(Object.keys(difficultyMeta) as Difficulty[]).map((diff) => (
-            <FilterChip
-              key={diff}
-              label={difficultyMeta[diff].label}
-              href={`/topics/${topic.slug}?difficulty=${diff}`}
-              active={searchParams.difficulty === diff}
-            />
-          ))}
-          {(Object.keys(typeLabels) as QuestionType[]).map((t) => (
-            <FilterChip
-              key={t}
-              label={typeLabels[t]}
-              href={`/topics/${topic.slug}?type=${t}`}
-              active={searchParams.type === t}
-            />
-          ))}
-        </div>
+        <FilterBar
+          param="difficulty"
+          options={(Object.keys(difficultyMeta) as Difficulty[]).map((diff) => ({
+            label: difficultyMeta[diff].label,
+            value: diff,
+          }))}
+        />
+        <div className="h-3" />
+        <FilterBar
+          param="type"
+          options={(Object.keys(typeLabels) as QuestionType[]).map((t) => ({ label: typeLabels[t], value: t }))}
+        />
       </Card>
 
-      <div className="grid gap-3">
-        {questions.map((q) => (
-          <Card key={q.id} className="p-5 hover:border-accent/60 transition duration-200">
-            <div className="flex items-start justify-between gap-4">
-              <div className="space-y-2">
-                <Link href={`/questions/${q.slug}`} className="font-semibold text-lg hover:text-accent">
-                  {q.title}
-                </Link>
-                <p className="text-sm text-slate-400 line-clamp-2">{q.prompt}</p>
-                <div className="flex flex-wrap gap-2">
-                  <Badge color={difficultyMeta[q.difficulty].color}>{difficultyMeta[q.difficulty].label}</Badge>
-                  <Badge color="muted">{typeLabels[q.type]}</Badge>
-                  {q.tags.map((tag) => (
-                    <Badge key={tag.tagId} color="muted">
-                      {tag.tag.name}
-                    </Badge>
-                  ))}
-                </div>
-              </div>
-              <div className="text-right text-sm text-slate-400 min-w-[140px] space-y-1">
-                <div className="text-slate-300 font-semibold flex items-center justify-end gap-2">
-                  <ArrowRight size={14} className="text-accent" /> {q.estimatedMinutes} min
-                </div>
-                <div className="text-xs uppercase tracking-wide text-slate-500">{q.topics[0]?.topic.name}</div>
-              </div>
-            </div>
-          </Card>
-        ))}
-        {questions.length === 0 && <Card className="p-5 text-slate-400">No questions yet for this filter.</Card>}
+      <div className="grid md:grid-cols-[2fr,1fr] gap-4">
+        <div className="grid gap-3">
+          {questions.map((q) => (
+            <QuestionCard
+              key={q.id}
+              title={q.title}
+              slug={q.slug}
+              prompt={q.prompt}
+              difficulty={q.difficulty}
+              type={q.type}
+              estimatedMinutes={q.estimatedMinutes}
+            />
+          ))}
+          {questions.length === 0 && <Card className="p-5 text-slate-400">No questions yet for this filter.</Card>}
+        </div>
+        <Card className="p-5 space-y-3">
+          <div className="font-semibold">Difficulty mix</div>
+          <DifficultyBars questions={questions} />
+          <div className="font-semibold">Recommended sequence</div>
+          <ul className="list-disc list-inside text-sm text-slate-300 space-y-1">
+            <li>Start with fundamentals</li>
+            <li>Move to modeling trade-offs</li>
+            <li>Finish with production/MLOps</li>
+          </ul>
+        </Card>
       </div>
     </div>
   );
 }
 
-function FilterChip({ label, href, active }: { label: string; href: string; active?: boolean }) {
+function DifficultyBars({ questions }: { questions: any[] }) {
+  const totals: Record<Difficulty, number> = { junior: 0, mid: 0, senior: 0, expert: 0 };
+  questions.forEach((q) => (totals[q.difficulty] += 1));
+  const all = Math.max(1, questions.length);
   return (
-    <Link
-      href={href as any}
-      className={`px-3 py-1.5 rounded-full border text-xs ${active ? "border-accent text-accent bg-accent/10" : "border-border text-slate-300 hover:border-accent/40"}`}
-    >
-      {label}
-    </Link>
+    <div className="space-y-2">
+      {(Object.keys(totals) as Difficulty[]).map((d) => {
+        const pct = Math.round((totals[d] / all) * 100);
+        return (
+          <div key={d} className="text-xs text-slate-400">
+            <div className="flex items-center justify-between">
+              <span>{difficultyMeta[d].label}</span>
+              <span>{pct}%</span>
+            </div>
+            <div className="h-2 rounded-full bg-border overflow-hidden mt-1">
+              <div className="h-full bg-accent" style={{ width: `${pct}%` }} />
+            </div>
+          </div>
+        );
+      })}
+    </div>
   );
 }

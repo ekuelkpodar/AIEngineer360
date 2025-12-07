@@ -2,6 +2,17 @@
 
 :root {
   color-scheme: dark;
+  --bg: #070b14;
+  --surface: #0b1021;
+  --surface-2: #0f172a;
+  --border: #1d2537;
+  --text: #e7ecf5;
+  --muted: #9aa4bc;
+  --accent: #9ef0c6;
+  --success: #8ff0a4;
+  --warn: #f3c06b;
+  --info: #7ed8ff;
+  --radius: 14px;
 }
 
 * {
@@ -12,8 +23,8 @@ body {
   margin: 0;
   background: radial-gradient(160% 120% at 20% 20%, rgba(142, 240, 195, 0.08), transparent 35%),
     radial-gradient(120% 120% at 80% 10%, rgba(93, 212, 255, 0.08), transparent 35%),
-    #080c18;
-  color: #e2e8f0;
+    var(--bg);
+  color: var(--text);
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   min-height: 100vh;
 }
