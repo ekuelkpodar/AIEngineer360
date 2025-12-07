@@ -95,7 +95,7 @@ export default async function TopicPage({ params, searchParams }: { params: { sl
 function FilterChip({ label, href, active }: { label: string; href: string; active?: boolean }) {
   return (
     <Link
-      href={href}
+      href={href as any}
       className={`px-3 py-1.5 rounded-full border text-xs ${active ? "border-accent text-accent bg-accent/10" : "border-border text-slate-300 hover:border-accent/40"}`}
     >
       {label}

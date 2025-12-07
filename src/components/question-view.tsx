@@ -9,6 +9,7 @@ import { ArrowRight, Bookmark, CheckCircle, Clock, Shuffle } from "lucide-react"
 
 export type QuestionViewModel = {
   id: string;
+  slug: string;
   title: string;
   prompt: string;
   answer: string;

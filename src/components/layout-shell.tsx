@@ -32,7 +32,7 @@ export function LayoutShell({ children }: { children: React.ReactNode }) {
             {navItems.map((item) => (
               <Link
                 key={item.href}
-                href={item.href}
+                href={item.href as any}
                 className={clsx(
                   "hover:text-white transition font-medium",
                   pathname === item.href && "text-accent"
@@ -57,7 +57,7 @@ export function LayoutShell({ children }: { children: React.ReactNode }) {
               {navItems.map((item) => (
                 <Link
                   key={item.href}
-                  href={item.href}
+                  href={item.href as any}
                   className="text-sm text-slate-200"
                   onClick={() => setOpen(false)}
                 >
