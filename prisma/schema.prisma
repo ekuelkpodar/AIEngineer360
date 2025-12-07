@@ -1,0 +1,138 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Difficulty {
+  junior
+  mid
+  senior
+  expert
+}
+
+enum QuestionType {
+  conceptual
+  coding
+  system_design
+  math
+}
+
+enum ProgressStatus {
+  not_started
+  in_progress
+  mastered
+}
+
+model User {
+  id           String     @id @default(cuid())
+  email        String     @unique
+  name         String?
+  createdAt    DateTime   @default(now())
+  preferences  Json?
+  bookmarks    Bookmark[]
+  progresses   Progress[]
+}
+
+model Topic {
+  id             String          @id @default(cuid())
+  name           String
+  slug           String          @unique
+  description    String
+  parentTopicId  String?
+  parent         Topic?          @relation("Subtopics", fields: [parentTopicId], references: [id])
+  children       Topic[]         @relation("Subtopics")
+  orderIndex     Int             @default(0)
+  isFeatured     Boolean         @default(false)
+  questionTopics QuestionTopic[]
+}
+
+model Question {
+  id            String          @id @default(cuid())
+  slug          String          @unique
+  title         String
+  prompt        String
+  answer        String
+  difficulty    Difficulty
+  type          QuestionType
+  estimatedMinutes Int          @default(5)
+  isPublished   Boolean         @default(true)
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  topics        QuestionTopic[]
+  tags          QuestionTag[]
+  bookmarks     Bookmark[]
+  progresses    Progress[]
+}
+
+model QuestionTopic {
+  questionId String
+  topicId    String
+  orderIndex Int @default(0)
+  question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  topic      Topic    @relation(fields: [topicId], references: [id], onDelete: Cascade)
+  @@id([questionId, topicId])
+}
+
+model Tag {
+  id    String @id @default(cuid())
+  name  String
+  slug  String  @unique
+  questions QuestionTag[]
+}
+
+model QuestionTag {
+  questionId String
+  tagId      String
+  question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  tag        Tag      @relation(fields: [tagId], references: [id], onDelete: Cascade)
+  @@id([questionId, tagId])
+}
+
+model Bookmark {
+  userId     String
+  questionId String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
+  @@id([userId, questionId])
+}
+
+model Progress {
+  userId        String
+  questionId    String
+  status        ProgressStatus @default(not_started)
+  lastReviewedAt DateTime?
+  confidence    Int? // 1-5
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  question      Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  @@id([userId, questionId])
+}
+
+model SearchSynonym {
+  id      String   @id @default(cuid())
+  term    String
+  synonyms String[]
+}
+
+model BlogPost {
+  id        String   @id @default(cuid())
+  title     String
+  slug      String   @unique
+  excerpt   String
+  body      String
+  createdAt DateTime @default(now())
+}
+
+model JobPost {
+  id        String   @id @default(cuid())
+  company   String
+  role      String
+  location  String
+  url       String
+  tags      String[]
+  createdAt DateTime @default(now())
+}

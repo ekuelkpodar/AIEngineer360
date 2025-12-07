@@ -1,0 +1,50 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #0b1021;
+  color: #e2e8f0;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  min-height: 100vh;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.prose pre {
+  background: #0f172a;
+  border: 1px solid #1e293b;
+}
+
+.prose code {
+  font-family: 'Space Grotesk', 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+}
+
+.gradient-border {
+  position: relative;
+}
+
+.gradient-border::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: 18px;
+  background: linear-gradient(120deg, rgba(142, 240, 195, 0.7), rgba(93, 212, 255, 0.5));
+  z-index: 0;
+  filter: blur(8px);
+}
+
+.gradient-border > * {
+  position: relative;
+  z-index: 1;
+}
