@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import { ArrowRight, Brain, Compass, LineChart, Sparkles, TimerReset, Zap } from "lucide-react";
+import { ArrowRight, Brain, Compass, Layers, LineChart, Sparkles, TimerReset, Zap } from "lucide-react";
 import { Badge, Button, Card } from "@/components/ui";
 import { getFeaturedTopics } from "@/lib/questions";
 
@@ -65,6 +65,31 @@ export default async function LandingPage() {
       </section>
 
       <section className="space-y-5">
+        <div className="flex items-center justify-between gap-3 flex-wrap">
+          <div>
+            <p className="text-xs uppercase tracking-[0.2em] text-slate-500">Knowledge map</p>
+            <h2 className="text-2xl font-semibold">Browse the ML interview surface area</h2>
+          </div>
+          <Link href="/topics" className="text-sm text-accent inline-flex items-center gap-1">
+            See all topics <ArrowRight size={16} />
+          </Link>
+        </div>
+        <Card className="p-5 border border-border/80 bg-[#0c1224]">
+          <div className="flex flex-wrap gap-2">
+            {topics.slice(0, 18).map((topic) => (
+              <Link
+                key={topic.id}
+                href={`/topics/${topic.slug}`}
+                className="px-3 py-1.5 rounded-full border border-border text-xs text-slate-200 hover:border-accent hover:text-accent transition"
+              >
+                {topic.name}
+              </Link>
+            ))}
+          </div>
+        </Card>
+      </section>
+
+      <section className="space-y-5">
         <div className="flex items-center justify-between">
           <div>
             <p className="text-xs uppercase tracking-[0.2em] text-slate-500">Curriculum</p>
@@ -120,6 +145,32 @@ export default async function LandingPage() {
           </p>
         </Card>
       </section>
+
+      <section className="space-y-4">
+        <div className="flex items-center justify-between gap-3 flex-wrap">
+          <div>
+            <p className="text-xs uppercase tracking-[0.2em] text-slate-500">Collections</p>
+            <h2 className="text-2xl font-semibold">Interview-ready playlists</h2>
+          </div>
+        </div>
+        <div className="grid md:grid-cols-3 gap-4">
+          <CollectionCard
+            title="ML system design"
+            description="Latency budgets, online vs offline eval, feature stores, and rollout playbooks."
+            accent="from-emerald-500/30 to-cyan-500/20"
+          />
+          <CollectionCard
+            title="Deep learning & transformers"
+            description="Architectures, attention, training stability, and production safety checks."
+            accent="from-indigo-500/30 to-purple-500/20"
+          />
+          <CollectionCard
+            title="Data science core"
+            description="Experimentation, causal inference, SQL fluency, and stakeholder communication."
+            accent="from-amber-500/30 to-rose-500/20"
+          />
+        </div>
+      </section>
     </div>
   );
 }
@@ -156,5 +207,26 @@ function MiniCard({ icon, title, copy }: { icon: React.ReactNode; title: string;
         <p className="text-slate-400 text-xs leading-relaxed">{copy}</p>
       </div>
     </div>
+  );
+}
+
+function CollectionCard({
+  title,
+  description,
+  accent,
+}: {
+  title: string;
+  description: string;
+  accent: string;
+}) {
+  return (
+    <Card className="p-5 border border-border/80 hover:border-accent/60 transition">
+      <div className={`h-32 rounded-xl bg-gradient-to-br ${accent} mb-4 border border-border/60`} />
+      <div className="flex items-center gap-2 text-xs uppercase tracking-[0.15em] text-slate-500 mb-2">
+        <Layers size={14} className="text-accent" /> Curated path
+      </div>
+      <h3 className="font-semibold text-lg text-white">{title}</h3>
+      <p className="text-sm text-slate-400 mt-2">{description}</p>
+    </Card>
   );
 }
