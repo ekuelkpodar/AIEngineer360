@@ -21,21 +21,21 @@ export function LayoutShell({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen relative">
       <div className="grid-overlay" />
-      <header className="sticky top-0 z-30 backdrop-blur border-b border-border bg-[#060a14e6]">
+      <header className="sticky top-0 z-30 backdrop-blur border-b border-border bg-white/80">
         <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2 font-display text-lg">
-            <span className="h-9 w-9 rounded-2xl bg-accent/20 border border-accent/30 flex items-center justify-center text-accent font-bold shadow-glow">
+          <Link href="/" className="flex items-center gap-2 font-display text-lg text-[#1f2430]">
+            <span className="h-9 w-9 rounded-2xl bg-accent/15 border border-accent/30 flex items-center justify-center text-accent font-bold shadow-glow">
               M
             </span>
             <span className="font-semibold tracking-tight">ModelPrep Hub</span>
           </Link>
-          <nav className="hidden md:flex items-center gap-6 text-sm text-slate-200">
+          <nav className="hidden md:flex items-center gap-6 text-sm text-[#1f2430]">
             {navItems.map((item) => (
               <Link
                 key={item.href}
                 href={item.href as any}
                 className={clsx(
-                  "hover:text-white transition font-medium",
+                  "hover:text-accent transition font-medium",
                   pathname === item.href && "text-accent"
                 )}
               >
