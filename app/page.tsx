@@ -11,7 +11,7 @@ function TagCloud({ topics }: { topics: { id: string; name: string; slug: string
         <Link
           key={topic.id}
           href={`/topics/${topic.slug}`}
-          className="px-3 py-1.5 rounded-full border border-border text-xs text-[#1f2430] hover:border-accent hover:text-accent transition"
+          className="px-3 py-1.5 rounded-full border border-border bg-white text-xs text-[#1f2430] hover:border-accent hover:text-accent transition shadow-sm"
         >
           {topic.name}
         </Link>
@@ -26,21 +26,23 @@ export default async function LandingPage() {
 
   return (
     <div className="space-y-12">
-      <section className="bg-white/80 border border-border rounded-3xl shadow-lg shadow-black/5 overflow-hidden">
-        <div className="px-6 md:px-10 py-10 flex flex-col items-center text-center gap-4 relative">
-          <div className="absolute inset-0 bg-gradient-to-r from-[#f5f0ff] via-white to-[#eef4ff] opacity-80" />
-          <div className="relative space-y-3 max-w-3xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-accent/30 bg-accent/10 text-xs font-semibold text-[#1f2430]">
-              <Sparkles size={14} className="text-accent" /> Curated ML, DS, Python interview prep
-            </div>
-            <h1 className="relative font-display text-4xl md:text-5xl font-bold leading-tight text-[#1f2430]">
-              Master your ML & DS interview with clarity.
-            </h1>
-            <p className="text-base md:text-lg text-slate-600">
-              1,000+ original questions, revealable answers, and practice sessions tuned for modern ML roles. Pick a goal, browse a path, and start a 10-minute drill.
-            </p>
+      <section className="relative overflow-hidden rounded-3xl border border-border shadow-xl shadow-black/10 bg-white">
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_30%,rgba(122,107,253,0.12),transparent_40%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(74,159,232,0.12),transparent_45%)]" />
+          <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(0,0,0,0.02),transparent)]" />
+        </div>
+        <div className="relative px-6 md:px-10 py-10 flex flex-col items-center text-center gap-5">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-accent/30 bg-accent/10 text-xs font-semibold text-[#1f2430] shadow-sm">
+            <Sparkles size={14} className="text-accent" /> Curated ML, DS, Python & LLMs
           </div>
-          <div className="relative flex flex-wrap justify-center gap-3">
+          <h1 className="font-display text-4xl md:text-5xl font-bold leading-tight text-[#1f2430]">
+            Master your ML & DS interview with confidence.
+          </h1>
+          <p className="text-base md:text-lg text-slate-600 max-w-3xl">
+            Drill curated questions, reveal answers on your terms, and run 10-minute sessions that mirror real interviews.
+          </p>
+          <div className="flex flex-wrap justify-center gap-3">
             <Button as-child size="lg" variant="primary" className="shadow-glow">
               <Link href="/practice?mode=timed">Start 10-minute session</Link>
             </Button>
@@ -48,22 +50,24 @@ export default async function LandingPage() {
               <Link href="/topics">Browse topics</Link>
             </Button>
           </div>
-          <Card className="relative w-full max-w-5xl p-6 border-dashed border-border/80 bg-white/70">
-            <div className="flex items-center justify-between flex-wrap gap-2 mb-4">
-              <div className="text-sm font-semibold text-[#1f2430]">Explore the stack</div>
-              <Link href="/topics" className="text-sm text-accent flex items-center gap-1">
-                View all <ArrowRight size={14} />
-              </Link>
-            </div>
-            <TagCloud topics={topics.slice(0, 42)} />
-          </Card>
+          <div className="w-full max-w-5xl">
+            <Card className="relative p-6 border border-border/80 bg-white/90 shadow-sm">
+              <div className="flex items-center justify-between flex-wrap gap-2 mb-4">
+                <div className="text-sm font-semibold text-[#1f2430]">Explore the stack</div>
+                <Link href="/topics" className="text-sm text-accent flex items-center gap-1">
+                  View all <ArrowRight size={14} />
+                </Link>
+              </div>
+              <TagCloud topics={topics.slice(0, 42)} />
+            </Card>
+          </div>
         </div>
       </section>
 
       <section className="grid md:grid-cols-3 gap-4">
         {featured.slice(0, 3).map((topic) => (
-          <Card key={topic.id} className="p-5 space-y-3 bg-white border border-border shadow-sm">
-            <div className="h-32 rounded-2xl bg-gradient-to-br from-[#c7d2ff] to-[#f2e8ff] border border-border/80" />
+          <Card key={topic.id} className="p-5 space-y-3 bg-white border border-border shadow-md">
+            <div className="h-32 rounded-2xl bg-gradient-to-br from-[#c7d2ff] via-[#e9e6ff] to-[#fdfbff] border border-border/80" />
             <div className="flex items-center gap-2 text-xs uppercase tracking-[0.15em] text-slate-500">
               <Layers size={14} className="text-accent" /> Featured path
             </div>
